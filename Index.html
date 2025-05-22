@@ -1,0 +1,50 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+    }
+
+    input {
+        padding: 8px;
+        width: 300px;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th,
+    td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f4f4f4;
+    }
+</style>
+<h1>Recherche d&apos;entreprise</h1>
+<p><input type="text" placeholder="Nom ou SIRET de l'entreprise...">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;</p>
+<table>
+    <thead>
+        <tr>
+            <th>Immatriculation</th>
+            <th>Marque</th>
+            <th>Mod&egrave;le</th>
+            <th>&Eacute;nergie</th>
+            <th>Carrosserie</th>
+            <th>Date 1&egrave;re mise en circulation</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<p>&nbsp;</p>
+<script>
+    let data = [];     fetch('vehicules_par_entreprise.json')      .then(response => response.json())      .then(json => { data = json; });     const input = document.getElementById('searchInput');    const table = document.getElementById('resultsTable');    const tbody = document.getElementById('resultsBody');     input.addEventListener('input', () => {      const query = input.value.trim().toLowerCase();      tbody.innerHTML = '';       if (query.length === 0) {        table.style.display = 'none';        return;      }       const filtered = data.filter(item =>        item["Raison sociale - Etablissement"].toLowerCase().includes(query) ||        item.SIRET.toString().includes(query)      );       if (filtered.length > 0) {        table.style.display = '';        filtered.forEach(vehicle => {          const row = `<tr>            <td>${vehicle.Immatriculation}</td>            <td>${vehicle.Marque}</td>            <td>${vehicle.Modèle}</td>            <td>${vehicle["Type d'énergie"]}</td>            <td>${vehicle["Type de carrosserie"]}</td>            <td>${vehicle["Date de 1ère mise en circulation"]}</td>          </tr>`;          tbody.innerHTML += row;        });      } else {        table.style.display = 'none';      }    });  
+</script>
+<p><br></p>
+<div style="color: red">Word to HTML trial - please <a href="https://wordtohtml.net/site/payment">Go PRO</a> to get whole HTML.</div>
